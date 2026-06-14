@@ -14,13 +14,13 @@
       --bg: #05050f;
       --surface: #0e0e1f;
       --border: rgba(255,255,255,0.07);
-      --border-focus: rgba(122,175,200,0.5);
-      --blue: #4a7fa5;
-      --blue-light: #7aafc8;
-      --blue-dark: #2d5f82;
+      --border-focus: rgba(109,212,245,0.5);
+      --blue: #3daee0;
+      --blue-light: #6dd4f5;
+      --blue-dark: #1e86bb;
       --text: #f1f5f9;
       --muted: #64748b;
-      --glow-blue: rgba(74,127,165,0.3);
+      --glow-blue: rgba(61,174,224,0.3);
     }
 
     html { scroll-behavior: smooth; }
@@ -46,7 +46,7 @@
 
     .orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
     .orb-1 { width: 600px; height: 600px; background: var(--glow-blue); top: -200px; right: -100px; animation: orbFloat 20s ease-in-out infinite alternate; }
-    .orb-2 { width: 400px; height: 400px; background: rgba(45,95,130,0.2); bottom: -100px; left: -150px; animation: orbFloat 25s ease-in-out infinite alternate; animation-delay: -10s; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(30,134,187,0.2); bottom: -100px; left: -150px; animation: orbFloat 25s ease-in-out infinite alternate; animation-delay: -10s; }
     @keyframes orbFloat {
       0%   { transform: translate(0,0) scale(1); }
       50%  { transform: translate(30px,-20px) scale(1.04); }
@@ -132,12 +132,12 @@
     }
     .form-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(122,175,200,0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(109,212,245,0.4), transparent);
     }
     .form-card::after {
       content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
       width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(74,127,165,0.08), transparent 70%);
+      background: radial-gradient(circle, rgba(61,174,224,0.08), transparent 70%);
       pointer-events: none;
     }
 
@@ -158,7 +158,7 @@
       font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     }
     .field input::placeholder { color: var(--muted); }
-    .field input:focus { border-color: var(--border-focus); background: rgba(74,127,165,0.06); box-shadow: 0 0 0 3px rgba(74,127,165,0.1); }
+    .field input:focus { border-color: var(--border-focus); background: rgba(61,174,224,0.06); box-shadow: 0 0 0 3px rgba(61,174,224,0.1); }
     .field input.error { border-color: rgba(239,68,68,0.5); }
 
     .pass-toggle {
@@ -200,7 +200,7 @@
       background: linear-gradient(135deg, var(--blue-light), var(--blue)); opacity: 0; transition: opacity 0.3s;
     }
     .btn-submit:hover::before { opacity: 1; }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,127,165,0.4); }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(61,174,224,0.4); }
     .btn-submit span { position: relative; z-index: 1; }
     .btn-submit.success { background: linear-gradient(135deg, #16a34a, #15803d); }
     .btn-submit.success::before { display: none; }
@@ -219,7 +219,7 @@
       padding: 11px; color: rgba(255,255,255,0.7); font-size: 0.82rem; font-weight: 500;
       cursor: pointer; text-decoration: none; font-family: 'Inter', sans-serif; transition: all 0.2s;
     }
-    .social-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(122,175,200,0.25); color: #fff; }
+    .social-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(109,212,245,0.25); color: #fff; }
 
     .signup-link { text-align: center; margin-top: 20px; font-size: 0.82rem; color: var(--muted); }
     .signup-link a { color: var(--blue-light); text-decoration: none; font-weight: 600; }
@@ -256,7 +256,7 @@
       font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;
       transition: all 0.2s; margin-top: 14px;
     }
-    .modal-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(74,127,165,0.35); }
+    .modal-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(61,174,224,0.35); }
     .modal-success { text-align: center; display: none; }
     .modal-success.visible { display: block; }
     .modal-success-icon { font-size: 2.5rem; margin-bottom: 12px; }
