@@ -426,6 +426,7 @@
       .form-row { grid-template-columns: 1fr; }
       .signup-card { padding: 28px 20px; }
     }
+    #socialToast.show { opacity:1!important; transform:translateX(-50%) translateY(0)!important; }
   </style>
 </head>
 <body>
@@ -535,7 +536,7 @@
 
         <div class="terms">
           <input type="checkbox" id="terms" />
-          <label for="terms">I agree to Cirqle's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I'm happy to receive cashback offers by email.</label>
+          <label for="terms">I agree to Cirqle's <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>. I'm happy to receive cashback offers by email.</label>
         </div>
         <div class="field-error" id="termsErr" style="margin-top:-10px; margin-bottom:14px;">You must accept the terms to continue.</div>
 
@@ -550,9 +551,9 @@
         </div>
 
         <div class="social-btns">
-          <a href="#" class="social-btn"><span class="social-icon">🍎</span> Apple</a>
-          <a href="#" class="social-btn"><span class="social-icon">G</span> Google</a>
-          <a href="#" class="social-btn"><span class="social-icon">📘</span> Facebook</a>
+          <a href="#" class="social-btn" onclick="showSocialToast(event)"><span class="social-icon">🍎</span> Apple</a>
+          <a href="#" class="social-btn" onclick="showSocialToast(event)"><span class="social-icon">G</span> Google</a>
+          <a href="#" class="social-btn" onclick="showSocialToast(event)"><span class="social-icon">📘</span> Facebook</a>
         </div>
       </form>
 
@@ -565,7 +566,7 @@
   <script>
     // ── If already signed in, go to browse ──
     if (localStorage.getItem('cirqle_session') || sessionStorage.getItem('cirqle_session')) {
-      window.location.href = 'browse.html';
+      window.location.href = 'dashboard.html';
     }
 
     // ── Password toggle ──
@@ -652,8 +653,17 @@
       btn.disabled = true;
       btn.classList.add('success');
       txt.textContent = `🎉 Welcome to Cirqle, ${fn}!`;
-      setTimeout(() => { window.location.href = 'browse.html'; }, 1600);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1600);
     });
+
+    // ── Social auth toast ──
+    function showSocialToast(e) {
+      e.preventDefault();
+      const t = document.getElementById('socialToast');
+      if (!t) return;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
 
     // ── Orb parallax ──
     document.addEventListener('mousemove', e => {
@@ -663,5 +673,6 @@
       document.querySelector('.orb-2').style.transform = `translate(${-x * 25}px, ${-y * 25}px)`;
     }, { passive: true });
   </script>
+  <div id="socialToast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,31,.95);border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(16px);border-radius:14px;padding:12px 22px;font-size:.85rem;color:#fff;z-index:5000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap">🔜 Social sign-in coming soon — use email for now</div>
 </body>
 </html>

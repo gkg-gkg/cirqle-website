@@ -571,7 +571,7 @@
         <div class="banner-title">Double cashback weekend — up to 20% back</div>
         <div class="banner-sub">Shop at 50+ selected brands this weekend and earn double cashback. Ends Sunday midnight.</div>
       </div>
-      <a href="#" class="banner-btn">Shop now →</a>
+      <a href="signup.html" class="banner-btn">Shop now →</a>
     </div>
   </div>
 
@@ -1056,6 +1056,18 @@
 
       allCards.forEach(c => grid.insertBefore(c, emptyState));
     });
+
+    // ── Wire shop buttons to deal pages ──
+    document.querySelectorAll('.shop-btn').forEach((btn, i) => {
+      btn.href = `deal.html?id=${i + 1}`;
+    });
+
+    // ── Auth-aware nav ──
+    const session = JSON.parse(localStorage.getItem('cirqle_session') || sessionStorage.getItem('cirqle_session') || 'null');
+    if (session) {
+      const cta = document.querySelector('.nav-cta');
+      cta.innerHTML = `<a href="dashboard.html" class="btn-primary">My dashboard</a>`;
+    }
 
     // ── Mouse parallax on orbs ──
     document.addEventListener('mousemove', e => {

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Cirqle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#05050f;--surface:#0e0e1f;--border:rgba(255,255,255,0.07);--blue:#4a7fa5;--blue-light:#7aafc8;--blue-dark:#2d5f82;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(74,127,165,0.3)}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
+    .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+    .orb-1{width:450px;height:450px;background:var(--glow);top:-100px;right:-100px;animation:orbFloat 18s ease-in-out infinite alternate}
+    .orb-2{width:320px;height:320px;background:rgba(45,95,130,.18);bottom:-60px;left:-60px;animation:orbFloat 22s ease-in-out infinite alternate;animation-delay:-9s}
+    @keyframes orbFloat{0%{transform:translate(0,0)}50%{transform:translate(30px,-25px)}100%{transform:translate(-15px,30px)}}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,15,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#7aafc8,#4a7fa5,#2d5f82);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+    .nav-right{display:flex;gap:12px}
+    .btn{padding:9px 20px;border-radius:50px;font-size:.83rem;font-weight:600;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif;border:none;cursor:pointer}
+    .btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff}
+    .btn-blue:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,127,165,.4)}
+    .btn-ghost{background:transparent;border:1px solid var(--border);color:rgba(255,255,255,.6)}
+    .btn-ghost:hover{border-color:rgba(122,175,200,.4);color:#fff}
+    .page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:120px 40px 100px}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .hero{text-align:center;margin-bottom:60px;opacity:0;transform:translateY(20px);animation:fadeUp .7s .1s forwards}
+    .hero-tag{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue-light);margin-bottom:12px}
+    .hero-h{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;letter-spacing:-1.5px;color:#fff;margin-bottom:14px}
+    .hero-p{font-size:.95rem;color:var(--muted);line-height:1.75}
+    .featured{background:linear-gradient(135deg,rgba(74,127,165,.1),rgba(45,95,130,.06));border:1px solid rgba(122,175,200,.15);border-radius:24px;padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:48px;opacity:0;transform:translateY(20px);animation:fadeUp .7s .2s forwards}
+    .feat-img{height:200px;border-radius:16px;background:linear-gradient(135deg,#1a2a3a,#0e1a2a);display:flex;align-items:center;justify-content:center;font-size:4rem}
+    .feat-tag{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue-light);margin-bottom:10px}
+    .feat-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-.3px;line-height:1.3}
+    .feat-desc{font-size:.85rem;color:var(--muted);line-height:1.65;margin-bottom:16px}
+    .feat-meta{font-size:.75rem;color:rgba(255,255,255,.35)}
+    .read-link{font-size:.85rem;font-weight:600;color:var(--blue-light);text-decoration:none}
+    .read-link:hover{color:#fff}
+    .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .blog-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .25s;opacity:0;transform:translateY(20px);animation:fadeUp .7s forwards;text-decoration:none;color:inherit;display:block}
+    .blog-card:hover{border-color:rgba(122,175,200,.2);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.3)}
+    .blog-card:nth-child(1){animation-delay:.25s}.blog-card:nth-child(2){animation-delay:.32s}.blog-card:nth-child(3){animation-delay:.39s}.blog-card:nth-child(4){animation-delay:.46s}.blog-card:nth-child(5){animation-delay:.53s}.blog-card:nth-child(6){animation-delay:.6s}
+    .card-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+    .card-body{padding:18px}
+    .card-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--blue-light);margin-bottom:6px}
+    .card-title{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;color:#fff;margin-bottom:6px;line-height:1.35}
+    .card-desc{font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:10px}
+    .card-meta{font-size:.7rem;color:rgba(255,255,255,.28)}
+    @media(max-width:720px){.blog-grid{grid-template-columns:1fr 1fr}.featured{grid-template-columns:1fr}.page{padding:90px 20px 60px}nav{padding:14px 20px}}
+    @media(max-width:500px){.blog-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="orb orb-1"></div><div class="orb orb-2"></div>
+<nav>
+  <a href="index.html" class="nav-logo">cirqle</a>
+  <div class="nav-right">
+    <a href="browse.html" class="btn btn-ghost">Browse</a>
+    <a href="signup.html" class="btn btn-blue">Get started</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="hero">
+    <div class="hero-tag">Cirqle Blog</div>
+    <h1 class="hero-h">Tips, deals & insights</h1>
+    <p class="hero-p">Guides on earning more cashback, brand spotlights, and the latest from Cirqle.</p>
+  </div>
+
+  <div class="featured">
+    <div class="feat-img">💰</div>
+    <div>
+      <div class="feat-tag">Tips & tricks</div>
+      <div class="feat-title">10 ways to maximise your cashback on every shop</div>
+      <div class="feat-desc">From stacking deals to posting strategies — our ultimate guide to squeezing every penny of cashback from Cirqle.</div>
+      <div class="feat-meta">14 Jun 2026 · 5 min read</div>
+      <br/><a href="#" class="read-link">Read article →</a>
+    </div>
+  </div>
+
+  <div class="blog-grid">
+    <a href="#" class="blog-card">
+      <div class="card-img" style="background:linear-gradient(135deg,#1a0a1a,#10050f)">👗</div>
+      <div class="card-body">
+        <div class="card-tag">Brand spotlight</div>
+        <div class="card-title">Why ASOS is the top earner for Cirqle members this month</div>
+        <div class="card-desc">10% cashback, no minimum spend, and thousands of styles. Here's why shoppers love it.</div>
+        <div class="card-meta">12 Jun 2026 · 3 min read</div>
+      </div>
+    </a>
+    <a href="#" class="blog-card">
+      <div class="card-img" style="background:linear-gradient(135deg,#001a10,#000f08)">🏋️</div>
+      <div class="card-body">
+        <div class="card-tag">Deal spotlight</div>
+        <div class="card-title">Gymshark's 20% cashback: the highest rate on the platform</div>
+        <div class="card-desc">Limited time. Here's everything you need to know to claim it before it expires.</div>
+        <div class="card-meta">10 Jun 2026 · 2 min read</div>
+      </div>
+    </a>
+    <a href="#" class="blog-card">
+      <div class="card-img" style="background:linear-gradient(135deg,#1a1a00,#0f0f00)">📱</div>
+      <div class="card-body">
+        <div class="card-tag">How it works</div>
+        <div class="card-title">What "posting" means on Cirqle — and how to do it right</div>
+        <div class="card-desc">New to Cirqle? Here's exactly what counts as a post and how to make sure your cashback gets verified.</div>
+        <div class="card-meta">8 Jun 2026 · 4 min read</div>
+      </div>
+    </a>
+    <a href="#" class="blog-card">
+      <div class="card-img" style="background:linear-gradient(135deg,#1a0a00,#100800)">✈️</div>
+      <div class="card-body">
+        <div class="card-tag">Travel</div>
+        <div class="card-title">Earn cashback on your summer holiday — our top travel brands</div>
+        <div class="card-desc">Booking.com, TUI, and more. Here's how to earn on flights, hotels, and experiences.</div>
+        <div class="card-meta">5 Jun 2026 · 3 min read</div>
+      </div>
+    </a>
+    <a href="#" class="blog-card">
+      <div class="card-img" style="background:linear-gradient(135deg,#001a1a,#000f0f)">🏠</div>
+      <div class="card-body">
+        <div class="card-tag">Home & Living</div>
+        <div class="card-title">Refurb your home and get paid back — IKEA & John Lewis deals</div>
+        <div class="card-desc">Summer is the perfect time to refresh your space. Here's what's earning right now.</div>
+        <div class="card-meta">2 Jun 2026 · 3 min read</div>
+      </div>
+    </a>
+    <a href="#" class="blog-card">
+      <div class="card-img" style="background:linear-gradient(135deg,#0a001a,#05000f)">🚀</div>
+      <div class="card-body">
+        <div class="card-tag">News</div>
+        <div class="card-title">Cirqle hits £2M cashback paid — thank you to our community</div>
+        <div class="card-desc">We hit a huge milestone this week. Here's a look back at how we got here and what's next.</div>
+        <div class="card-meta">1 Jun 2026 · 2 min read</div>
+      </div>
+    </a>
+  </div>
+</div>
+<script>
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX/window.innerWidth-.5)*2, y = (e.clientY/window.innerHeight-.5)*2;
+  document.querySelector('.orb-1').style.transform = `translate(${x*18}px,${y*18}px)`;
+  document.querySelector('.orb-2').style.transform = `translate(${-x*22}px,${-y*22}px)`;
+}, {passive:true});
+</script>
+</body>
+</html>

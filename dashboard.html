@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Cirqle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#05050f;--surface:#0e0e1f;--border:rgba(255,255,255,0.07);--blue:#4a7fa5;--blue-light:#7aafc8;--blue-dark:#2d5f82;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(74,127,165,0.3)}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
+    .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+    .orb-1{width:500px;height:500px;background:var(--glow);top:-150px;left:-150px;animation:orbFloat 18s ease-in-out infinite alternate}
+    .orb-2{width:400px;height:400px;background:rgba(45,95,130,.2);bottom:-100px;right:-100px;animation:orbFloat 22s ease-in-out infinite alternate;animation-delay:-8s}
+    @keyframes orbFloat{0%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-30px) scale(1.05)}100%{transform:translate(-20px,40px) scale(.97)}}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,15,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#7aafc8,#4a7fa5,#2d5f82);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+    .nav-right{display:flex;align-items:center;gap:16px}
+    .nav-user{display:flex;align-items:center;gap:10px}
+    .nav-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff}
+    .nav-name{font-size:.88rem;color:rgba(255,255,255,.8);font-weight:500}
+    .btn-sm{padding:8px 16px;border-radius:50px;font-size:.82rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif}
+    .btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none}
+    .btn-blue:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,127,165,.4)}
+    .btn-ghost-sm{background:transparent;border:1px solid var(--border);color:rgba(255,255,255,.6)}
+    .btn-ghost-sm:hover{border-color:rgba(122,175,200,.4);color:#fff}
+
+    .page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:100px 40px 80px}
+
+    /* Greeting */
+    .greeting{margin-bottom:40px;opacity:0;transform:translateY(20px);animation:fadeUp .7s .1s forwards}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .greeting-time{font-size:.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue-light);margin-bottom:8px}
+    .greeting-name{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:700;letter-spacing:-1px;color:#fff}
+    .greeting-sub{font-size:.95rem;color:var(--muted);margin-top:6px}
+
+    /* Stats row */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px 24px;opacity:0;transform:translateY(20px);animation:fadeUp .7s forwards}
+    .stat-card:nth-child(1){animation-delay:.15s}
+    .stat-card:nth-child(2){animation-delay:.22s}
+    .stat-card:nth-child(3){animation-delay:.29s}
+    .stat-card:nth-child(4){animation-delay:.36s}
+    .stat-card-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+    .stat-card-val{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;background:linear-gradient(135deg,var(--blue-light),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+    .stat-card-sub{font-size:.72rem;color:var(--muted);margin-top:6px}
+    .stat-up{color:#4ade80;font-weight:600}
+
+    /* Main grid */
+    .main-grid{display:grid;grid-template-columns:1fr 360px;gap:24px}
+
+    /* Wallet card */
+    .wallet-card{background:linear-gradient(135deg,rgba(74,127,165,.12),rgba(45,95,130,.08));border:1px solid rgba(122,175,200,.15);border-radius:24px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden;opacity:0;animation:fadeUp .7s .4s forwards}
+    .wallet-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(74,127,165,.15),transparent 70%);pointer-events:none}
+    .wallet-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+    .wallet-balance{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:#fff;letter-spacing:-2px;margin-bottom:4px}
+    .wallet-balance span{background:linear-gradient(135deg,var(--blue-light),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .wallet-sub{font-size:.85rem;color:var(--muted);margin-bottom:28px}
+    .wallet-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .wallet-btn{padding:12px 24px;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+    .wallet-btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none}
+    .wallet-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,127,165,.4)}
+    .wallet-btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--border);color:rgba(255,255,255,.7)}
+    .wallet-btn-ghost:hover{background:rgba(255,255,255,.09);color:#fff}
+
+    /* Activity feed */
+    .section-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:-.3px}
+    .activity-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;opacity:0;animation:fadeUp .7s .5s forwards}
+    .activity-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .activity-item:last-child{border-bottom:none}
+    .activity-dot{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+    .ad-green{background:rgba(74,222,128,.1)}
+    .ad-blue{background:rgba(74,127,165,.15)}
+    .ad-orange{background:rgba(249,115,22,.1)}
+    .activity-info{flex:1}
+    .activity-name{font-size:.85rem;font-weight:500;color:rgba(255,255,255,.85)}
+    .activity-date{font-size:.72rem;color:var(--muted);margin-top:2px}
+    .activity-amount{font-size:.88rem;font-weight:700}
+    .amount-green{color:#4ade80}
+    .amount-muted{color:var(--muted)}
+
+    /* Right column */
+    .right-col{}
+
+    /* Progress card */
+    .progress-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px;opacity:0;animation:fadeUp .7s .45s forwards}
+    .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .goal-label{font-size:.82rem;color:rgba(255,255,255,.7);font-weight:500}
+    .goal-val{font-size:.82rem;color:#4ade80;font-weight:600}
+    .progress-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);margin:10px 0;overflow:hidden}
+    .progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--blue-light));transform:scaleX(0);transform-origin:left;transition:transform 1.5s ease}
+    .progress-fill.anim{transform:scaleX(1)}
+    .progress-note{font-size:.72rem;color:var(--muted)}
+
+    /* Streak card */
+    .streak-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:16px;opacity:0;animation:fadeUp .7s .5s forwards}
+    .streak-icon{font-size:2rem}
+    .streak-num{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:#f97316;line-height:1}
+    .streak-label{font-size:.78rem;color:var(--muted)}
+
+    /* Active deals */
+    .deals-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;opacity:0;animation:fadeUp .7s .55s forwards}
+    .mini-deal{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .mini-deal:last-child{border-bottom:none}
+    .mini-deal-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:rgba(74,127,165,.12)}
+    .mini-deal-info{flex:1}
+    .mini-deal-name{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.85)}
+    .mini-deal-cb{font-size:.7rem;color:var(--blue-light)}
+    .mini-deal-btn{font-size:.72rem;padding:5px 12px;border-radius:50px;background:rgba(74,127,165,.12);border:1px solid rgba(122,175,200,.2);color:var(--blue-light);cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap}
+    .mini-deal-btn:hover{background:rgba(74,127,165,.22);color:#fff}
+
+    /* Toast */
+    .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,31,.95);border:1px solid var(--border);backdrop-filter:blur(16px);border-radius:14px;padding:12px 20px;font-size:.85rem;color:#fff;z-index:5000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:900px){.stats-row{grid-template-columns:repeat(2,1fr)}.main-grid{grid-template-columns:1fr}.page{padding:90px 20px 60px}nav{padding:14px 20px}}
+  </style>
+</head>
+<body>
+<div class="orb orb-1"></div><div class="orb orb-2"></div>
+<div class="toast" id="toast"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">cirqle</a>
+  <div class="nav-right">
+    <div class="nav-user">
+      <div class="nav-avatar" id="navAvatar">?</div>
+      <span class="nav-name" id="navName">Loading…</span>
+    </div>
+    <a href="browse.html" class="btn-sm btn-ghost-sm">Browse deals</a>
+    <button class="btn-sm btn-ghost-sm" onclick="signOut()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="greeting">
+    <div class="greeting-time" id="greetingTime">Good morning</div>
+    <div class="greeting-name" id="greetingName">Welcome back 👋</div>
+    <div class="greeting-sub">Here's your cashback overview.</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-card-label">Total earned</div>
+      <div class="stat-card-val">£<span class="count" data-target="47" data-dec="2">0</span></div>
+      <div class="stat-card-sub"><span class="stat-up">↑ £12.40</span> this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Pending</div>
+      <div class="stat-card-val">£<span class="count" data-target="8" data-dec="2">0</span></div>
+      <div class="stat-card-sub">3 purchases verifying</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Brands used</div>
+      <div class="stat-card-val"><span class="count" data-target="12" data-dec="0">0</span></div>
+      <div class="stat-card-sub">This month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Day streak</div>
+      <div class="stat-card-val"><span class="count" data-target="7" data-dec="0">0</span>🔥</div>
+      <div class="stat-card-sub">Keep it going!</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div>
+      <!-- Wallet -->
+      <div class="wallet-card">
+        <div class="wallet-label">Available balance</div>
+        <div class="wallet-balance">£<span id="walletBal">47.80</span></div>
+        <div class="wallet-sub">Ready to withdraw to your bank or PayPal</div>
+        <div class="wallet-actions">
+          <button class="wallet-btn wallet-btn-primary" onclick="showToast('💸 Withdrawal requested — arrives in 1–2 days')">💸 Withdraw</button>
+          <a href="browse.html" class="wallet-btn wallet-btn-ghost">🛍️ Find deals</a>
+          <button class="wallet-btn wallet-btn-ghost" onclick="showToast('📤 Share link copied!')">📤 Refer a friend</button>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="activity-card">
+        <div class="section-title">Recent activity</div>
+        <div class="activity-item">
+          <div class="activity-dot ad-green">✅</div>
+          <div class="activity-info"><div class="activity-name">Nike — Summer Sale cashback confirmed</div><div class="activity-date">Today, 09:14</div></div>
+          <div class="activity-amount amount-green">+£3.50</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot ad-blue">🛍️</div>
+          <div class="activity-info"><div class="activity-name">ASOS post verified</div><div class="activity-date">Yesterday, 18:42</div></div>
+          <div class="activity-amount amount-green">+£2.10</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot ad-orange">⏳</div>
+          <div class="activity-info"><div class="activity-name">Gymshark — purchase pending verification</div><div class="activity-date">12 Jun, 14:20</div></div>
+          <div class="activity-amount" style="color:#f97316">Pending</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot ad-green">✅</div>
+          <div class="activity-info"><div class="activity-name">Deliveroo — order cashback</div><div class="activity-date">10 Jun, 20:05</div></div>
+          <div class="activity-amount amount-green">+£0.80</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot ad-blue">💸</div>
+          <div class="activity-info"><div class="activity-name">Withdrawal to PayPal</div><div class="activity-date">8 Jun, 11:00</div></div>
+          <div class="activity-amount amount-muted">-£25.00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <!-- Monthly goal -->
+      <div class="progress-card">
+        <div class="section-title">Monthly goal</div>
+        <div class="goal-header">
+          <span class="goal-label">£47.80 / £100 target</span>
+          <span class="goal-val">48%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:47.8%"></div></div>
+        <div class="progress-note">£52.20 to go — you're on track 🎯</div>
+      </div>
+
+      <!-- Streak -->
+      <div class="streak-card">
+        <div class="streak-icon">🔥</div>
+        <div>
+          <div class="streak-num">7</div>
+          <div class="streak-label">day earning streak</div>
+        </div>
+      </div>
+
+      <!-- Active deals -->
+      <div class="deals-card">
+        <div class="section-title">Active deals for you</div>
+        <div class="mini-deal">
+          <div class="mini-deal-icon">👟</div>
+          <div class="mini-deal-info"><div class="mini-deal-name">Nike</div><div class="mini-deal-cb">13% Cashback</div></div>
+          <a href="deal.html?id=1" class="mini-deal-btn">Shop →</a>
+        </div>
+        <div class="mini-deal">
+          <div class="mini-deal-icon">👗</div>
+          <div class="mini-deal-info"><div class="mini-deal-name">ASOS</div><div class="mini-deal-cb">10% Cashback</div></div>
+          <a href="deal.html?id=2" class="mini-deal-btn">Shop →</a>
+        </div>
+        <div class="mini-deal">
+          <div class="mini-deal-icon">🏋️</div>
+          <div class="mini-deal-info"><div class="mini-deal-name">Gymshark</div><div class="mini-deal-cb">20% Cashback</div></div>
+          <a href="deal.html?id=6" class="mini-deal-btn">Shop →</a>
+        </div>
+        <div class="mini-deal">
+          <div class="mini-deal-icon">🍔</div>
+          <div class="mini-deal-info"><div class="mini-deal-name">Deliveroo</div><div class="mini-deal-cb">8% Cashback</div></div>
+          <a href="deal.html?id=7" class="mini-deal-btn">Shop →</a>
+        </div>
+        <div style="text-align:center;margin-top:14px">
+          <a href="browse.html" style="font-size:.8rem;color:var(--blue-light);text-decoration:none">View all 500+ deals →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Auth check ──
+  const session = JSON.parse(localStorage.getItem('cirqle_session') || sessionStorage.getItem('cirqle_session') || 'null');
+  if (!session) { window.location.href = 'signin.html'; }
+  else {
+    document.getElementById('navName').textContent = session.firstName + ' ' + session.lastName;
+    document.getElementById('navAvatar').textContent = session.firstName[0].toUpperCase();
+    const h = new Date().getHours();
+    const time = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('greetingTime').textContent = time;
+    document.getElementById('greetingName').textContent = `${time}, ${session.firstName} 👋`;
+  }
+
+  // ── Counters ──
+  document.querySelectorAll('.count').forEach(el => {
+    const target = +el.dataset.target;
+    const dec = +el.dataset.dec;
+    let cur = 0;
+    const step = target / 60;
+    const t = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = dec ? cur.toFixed(dec) : Math.floor(cur);
+      if (cur >= target) clearInterval(t);
+    }, 16);
+  });
+
+  // ── Progress bar ──
+  setTimeout(() => document.getElementById('progFill').classList.add('anim'), 500);
+
+  // ── Sign out ──
+  function signOut() {
+    localStorage.removeItem('cirqle_session');
+    sessionStorage.removeItem('cirqle_session');
+    window.location.href = 'index.html';
+  }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Orb parallax ──
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX/window.innerWidth-.5)*2, y = (e.clientY/window.innerHeight-.5)*2;
+    document.querySelector('.orb-1').style.transform = `translate(${x*20}px,${y*20}px)`;
+    document.querySelector('.orb-2').style.transform = `translate(${-x*25}px,${-y*25}px)`;
+  }, {passive:true});
+</script>
+</body>
+</html>

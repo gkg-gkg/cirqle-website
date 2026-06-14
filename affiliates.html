@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Affiliates — Cirqle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#05050f;--surface:#0e0e1f;--border:rgba(255,255,255,0.07);--blue:#4a7fa5;--blue-light:#7aafc8;--blue-dark:#2d5f82;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(74,127,165,0.3)}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
+    .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+    .orb-1{width:450px;height:450px;background:var(--glow);top:-100px;left:-100px;animation:orbFloat 18s ease-in-out infinite alternate}
+    .orb-2{width:320px;height:320px;background:rgba(45,95,130,.18);bottom:-60px;right:-60px;animation:orbFloat 22s ease-in-out infinite alternate;animation-delay:-9s}
+    @keyframes orbFloat{0%{transform:translate(0,0)}50%{transform:translate(30px,-25px)}100%{transform:translate(-15px,30px)}}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,15,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#7aafc8,#4a7fa5,#2d5f82);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+    .nav-right{display:flex;gap:12px}
+    .btn{padding:9px 20px;border-radius:50px;font-size:.83rem;font-weight:600;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif;border:none;cursor:pointer}
+    .btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff}
+    .btn-blue:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,127,165,.4)}
+    .btn-ghost{background:transparent;border:1px solid var(--border);color:rgba(255,255,255,.6)}
+    .btn-ghost:hover{border-color:rgba(122,175,200,.4);color:#fff}
+    .page{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:120px 40px 100px}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    .hero{text-align:center;margin-bottom:60px;opacity:0;transform:translateY(20px);animation:fadeUp .7s .1s forwards}
+    .hero-tag{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue-light);margin-bottom:12px}
+    .hero-h{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-2px;color:#fff;margin-bottom:14px}
+    .hero-p{font-size:.95rem;color:var(--muted);line-height:1.75;max-width:560px;margin:0 auto 28px}
+    .hero-cta{display:inline-block;padding:14px 38px;border-radius:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.93rem;text-decoration:none;transition:all .25s}
+    .hero-cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(74,127,165,.45)}
+    .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:60px;opacity:0;transform:translateY(20px);animation:fadeUp .7s .2s forwards}
+    .tier{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;text-align:center;position:relative;overflow:hidden}
+    .tier.popular{border-color:rgba(122,175,200,.3);background:linear-gradient(135deg,rgba(74,127,165,.1),rgba(45,95,130,.06))}
+    .tier-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:50px;text-transform:uppercase;letter-spacing:1px}
+    .tier-name{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--blue-light);margin-bottom:8px}
+    .tier-rate{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:#fff;margin-bottom:4px}
+    .tier-label{font-size:.78rem;color:var(--muted);margin-bottom:16px}
+    .tier-req{font-size:.75rem;color:var(--muted);padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;line-height:1.6}
+    .how-section{margin-bottom:60px;opacity:0;transform:translateY(20px);animation:fadeUp .7s .3s forwards}
+    h2{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:20px}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .step{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
+    .step-n{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;margin:0 auto 10px}
+    .step-t{font-size:.8rem;color:rgba(255,255,255,.7);line-height:1.55}
+    .faq-simple{opacity:0;animation:fadeUp .7s .4s forwards;margin-bottom:48px}
+    .faq-r{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:10px}
+    .faq-q{font-size:.88rem;font-weight:600;color:#fff;margin-bottom:6px}
+    .faq-a{font-size:.82rem;color:var(--muted);line-height:1.65}
+    .cta-box{background:linear-gradient(135deg,rgba(74,127,165,.12),rgba(45,95,130,.07));border:1px solid rgba(122,175,200,.18);border-radius:24px;padding:48px;text-align:center;opacity:0;animation:fadeUp .7s .5s forwards}
+    .cta-box h2{margin-bottom:10px}
+    .cta-box p{font-size:.88rem;color:var(--muted);margin-bottom:24px}
+    .cta-box a{display:inline-block;padding:14px 36px;border-radius:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;font-weight:700;font-size:.92rem;text-decoration:none;transition:all .25s}
+    .cta-box a:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(74,127,165,.4)}
+    @media(max-width:720px){.tiers,.steps{grid-template-columns:1fr 1fr}.page{padding:90px 20px 60px}nav{padding:14px 20px}}
+    @media(max-width:450px){.tiers,.steps{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="orb orb-1"></div><div class="orb orb-2"></div>
+<nav>
+  <a href="index.html" class="nav-logo">cirqle</a>
+  <div class="nav-right">
+    <a href="browse.html" class="btn btn-ghost">Browse</a>
+    <a href="signup.html" class="btn btn-blue">Get started</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="hero">
+    <div class="hero-tag">Affiliates</div>
+    <h1 class="hero-h">Refer friends.<br>Earn forever.</h1>
+    <p class="hero-p">Invite people to Cirqle and earn a commission on every pound of cashback they earn — for life. No cap, no expiry.</p>
+    <a href="signup.html" class="hero-cta">Start earning commissions →</a>
+  </div>
+
+  <div class="tiers">
+    <div class="tier">
+      <div class="tier-name">Starter</div>
+      <div class="tier-rate">5%</div>
+      <div class="tier-label">commission on referrals' cashback</div>
+      <div class="tier-req">1–9 active referrals<br>No minimum required</div>
+    </div>
+    <div class="tier popular">
+      <div class="tier-badge">Most popular</div>
+      <div class="tier-name">Pro</div>
+      <div class="tier-rate">10%</div>
+      <div class="tier-label">commission on referrals' cashback</div>
+      <div class="tier-req">10–49 active referrals<br>Dedicated affiliate support</div>
+    </div>
+    <div class="tier">
+      <div class="tier-name">Elite</div>
+      <div class="tier-rate">15%</div>
+      <div class="tier-label">commission on referrals' cashback</div>
+      <div class="tier-req">50+ active referrals<br>Priority payouts + bonuses</div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Sign up</strong> to Cirqle and get your unique referral link in your dashboard.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Share</strong> your link via social, email, or your website — anywhere.</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t"><strong>They join</strong> and start shopping — your commission kicks in automatically.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t"><strong>Earn forever</strong> — you get a % of every pound they earn, for life.</div></div>
+    </div>
+  </div>
+
+  <div class="faq-simple">
+    <h2>FAQ</h2>
+    <div class="faq-r"><div class="faq-q">When do I get paid?</div><div class="faq-a">Commission is credited to your wallet monthly, on the 1st. Minimum payout is £5.</div></div>
+    <div class="faq-r"><div class="faq-q">Is there a limit on how many people I can refer?</div><div class="faq-a">No limit at all. Refer as many people as you like — you earn on every single one.</div></div>
+    <div class="faq-r"><div class="faq-q">What counts as an "active referral"?</div><div class="faq-a">A referral is active if they've earned cashback at least once in the past 90 days.</div></div>
+    <div class="faq-r"><div class="faq-q">Can I use my own referral link?</div><div class="faq-a">No — self-referral isn't allowed. Your referral link is only valid for genuinely new accounts.</div></div>
+  </div>
+
+  <div class="cta-box">
+    <h2>Ready to start earning commissions?</h2>
+    <p>Create your free Cirqle account — your referral link is waiting in your dashboard.</p>
+    <a href="signup.html">Create your account →</a>
+  </div>
+</div>
+<script>
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX/window.innerWidth-.5)*2, y = (e.clientY/window.innerHeight-.5)*2;
+  document.querySelector('.orb-1').style.transform = `translate(${x*18}px,${y*18}px)`;
+  document.querySelector('.orb-2').style.transform = `translate(${-x*22}px,${-y*22}px)`;
+}, {passive:true});
+</script>
+</body>
+</html>

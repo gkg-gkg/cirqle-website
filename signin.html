@@ -363,9 +363,9 @@
         </div>
 
         <div class="social-btns">
-          <a href="#" class="social-btn">🍎 Apple</a>
-          <a href="#" class="social-btn">G Google</a>
-          <a href="#" class="social-btn">📘 Facebook</a>
+          <a href="#" class="social-btn" onclick="showSocialToast(event)">🍎 Apple</a>
+          <a href="#" class="social-btn" onclick="showSocialToast(event)">G Google</a>
+          <a href="#" class="social-btn" onclick="showSocialToast(event)">📘 Facebook</a>
         </div>
       </form>
 
@@ -400,9 +400,9 @@
   </div>
 
   <script>
-    // ── If already signed in, go to browse ──
-    if (localStorage.getItem('cirqle_session')) {
-      window.location.href = 'browse.html';
+    // ── If already signed in, go to dashboard ──
+    if (localStorage.getItem('cirqle_session') || sessionStorage.getItem('cirqle_session')) {
+      window.location.href = 'dashboard.html';
     }
 
     // ── Password toggle ──
@@ -460,7 +460,7 @@
       btn.disabled = true;
       btn.classList.add('success');
       document.getElementById('submitText').textContent = `🎉 Welcome back, ${user.firstName}!`;
-      setTimeout(() => { window.location.href = 'browse.html'; }, 1400);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1400);
     });
 
     // ── Clear errors on input ──
@@ -489,6 +489,16 @@
       document.getElementById('forgotSuccess').classList.add('visible');
     });
 
+    // ── Social auth toast ──
+    function showSocialToast(e) {
+      e.preventDefault();
+      const t = document.getElementById('socialToast');
+      if (!t) return;
+      t.style.opacity = '1';
+      t.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 3000);
+    }
+
     // ── Orb parallax ──
     document.addEventListener('mousemove', e => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -497,5 +507,6 @@
       document.querySelector('.orb-2').style.transform = `translate(${-x * 25}px, ${-y * 25}px)`;
     }, { passive: true });
   </script>
+  <div id="socialToast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,31,.95);border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(16px);border-radius:14px;padding:12px 22px;font-size:.85rem;color:#fff;z-index:5000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap">🔜 Social sign-in coming soon — use email for now</div>
 </body>
 </html>
