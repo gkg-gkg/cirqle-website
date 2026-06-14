@@ -89,30 +89,7 @@
       background-clip: text;
       text-decoration: none;
     }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover, .nav-links a.active { color: #fff; }
-    .nav-links a.active { color: var(--blue-light); }
     .nav-cta { display: flex; gap: 12px; align-items: center; }
-    .btn-ghost {
-      color: rgba(255,255,255,0.7);
-      background: transparent;
-      border: 1px solid var(--border);
-      padding: 9px 20px;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .btn-ghost:hover { border-color: rgba(122,175,200,0.5); color: #fff; background: rgba(74,127,165,0.1); }
     .btn-primary {
       background: linear-gradient(135deg, var(--blue), var(--blue-dark));
       color: #fff;
@@ -416,11 +393,12 @@
     .card-cashback {
       display: flex;
       flex-direction: column;
+      gap: 2px;
     }
-    .cashback-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .cashback-val {
+    .cashback-earn-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .cashback-earn-val {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       background: linear-gradient(135deg, var(--blue-light), var(--blue));
       -webkit-background-clip: text;
@@ -428,6 +406,7 @@
       background-clip: text;
       line-height: 1.1;
     }
+    .cashback-total { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
 
     .card-clicks {
       display: flex;
@@ -564,14 +543,8 @@
   <!-- NAV -->
   <nav>
     <a href="index.html" class="nav-logo">cirqle</a>
-    <ul class="nav-links">
-      <li><a href="index.html#how">How it works</a></li>
-      <li><a href="browse.html" class="active">Browse deals</a></li>
-      <li><a href="index.html#testimonials">Reviews</a></li>
-    </ul>
     <div class="nav-cta">
-      <a href="index.html" class="btn-ghost">Back to home</a>
-      <a href="#" class="btn-primary">Sign up free</a>
+      <a href="signup.html" class="btn-primary">Sign up free</a>
     </div>
   </nav>
 
@@ -635,7 +608,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #1a3a5c, #2d6a8f);">👟</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">13% OFF</div>
+          <div class="discount-badge featured">13% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#4a7fa5,#2d5f82);">N</div>
             <span class="card-brand-name">Nike</span>
@@ -651,8 +624,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£112,705</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£13.00</span>
+            <span class="cashback-total">£112,705 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 1,840 clicks</div>
@@ -666,7 +640,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #1c1c3a, #2a2a5c);">👗</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">10% OFF</div>
+          <div class="discount-badge featured">10% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#6366f1,#4338ca);">A</div>
             <span class="card-brand-name">ASOS</span>
@@ -682,8 +656,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£54,116</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£6.00</span>
+            <span class="cashback-total">£54,116 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 2,100 clicks</div>
@@ -697,7 +672,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #0d2137, #1a4a6b); font-size:3rem; font-weight:900; font-family:'Space Grotesk',sans-serif; color:rgba(255,255,255,0.15); letter-spacing:-2px;">prime</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge hot">10% OFF</div>
+          <div class="discount-badge hot">10% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#f59e0b,#d97706);">a</div>
             <span class="card-brand-name">Amazon</span>
@@ -713,8 +688,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£9,891</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£1.00</span>
+            <span class="cashback-total">£9,891 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 980 clicks</div>
@@ -728,7 +704,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #0c3547, #1a6a8f);">🚆</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">12% OFF</div>
+          <div class="discount-badge featured">12% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#0ea5e9,#0284c7);">T</div>
             <span class="card-brand-name">Trainline</span>
@@ -744,8 +720,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£112,705</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£5.40</span>
+            <span class="cashback-total">£112,705 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 3,200 clicks</div>
@@ -759,7 +736,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #1a1a2e, #3d1a5c);">💄</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">15% OFF</div>
+          <div class="discount-badge featured">15% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#ec4899,#be185d);">B</div>
             <span class="card-brand-name">Boots</span>
@@ -775,8 +752,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£28,940</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£5.25</span>
+            <span class="cashback-total">£28,940 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 1,560 clicks</div>
@@ -790,7 +768,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #0a1f3c, #162d5c);">🏋️</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge hot">20% OFF</div>
+          <div class="discount-badge hot">20% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#4a7fa5,#1a4060);">G</div>
             <span class="card-brand-name">Gymshark</span>
@@ -806,8 +784,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£62,140</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£14.00</span>
+            <span class="cashback-total">£62,140 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 2,800 clicks</div>
@@ -821,7 +800,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #1a0a00, #3d1500);">🍔</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">8% OFF</div>
+          <div class="discount-badge featured">8% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#f97316,#c2410c);">D</div>
             <span class="card-brand-name">Deliveroo</span>
@@ -837,8 +816,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£18,440</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£2.00</span>
+            <span class="cashback-total">£18,440 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 4,100 clicks</div>
@@ -852,7 +832,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d);">💻</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">11% OFF</div>
+          <div class="discount-badge featured">11% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#64748b,#334155);">C</div>
             <span class="card-brand-name">Currys</span>
@@ -868,8 +848,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£75,200</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£16.50</span>
+            <span class="cashback-total">£75,200 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 1,200 clicks</div>
@@ -883,7 +864,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #0c1a3a, #1a3a6a);">✈️</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">9% OFF</div>
+          <div class="discount-badge featured">9% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#2563eb,#1d4ed8);">T</div>
             <span class="card-brand-name">TUI</span>
@@ -899,8 +880,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£98,500</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£72.00</span>
+            <span class="cashback-total">£98,500 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 760 clicks</div>
@@ -914,7 +896,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #0a2a1a, #1a5c35);">🛋️</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">7% OFF</div>
+          <div class="discount-badge featured">7% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#16a34a,#15803d);">I</div>
             <span class="card-brand-name">IKEA</span>
@@ -930,8 +912,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£31,020</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£7.00</span>
+            <span class="cashback-total">£31,020 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 890 clicks</div>
@@ -945,7 +928,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #1a0c00, #3d2000);">☕</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">6% OFF</div>
+          <div class="discount-badge featured">6% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#92400e,#78350f);">C</div>
             <span class="card-brand-name">Costa</span>
@@ -961,8 +944,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£12,080</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£0.90</span>
+            <span class="cashback-total">£12,080 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 5,600 clicks</div>
@@ -976,7 +960,7 @@
         <div class="card-image">
           <div class="card-image-bg" style="background: linear-gradient(135deg, #0a1a2e, #0f2d4a);">💪</div>
           <div class="card-image-overlay"></div>
-          <div class="discount-badge featured">14% OFF</div>
+          <div class="discount-badge featured">14% Cashback</div>
           <div class="card-brand-chip">
             <div class="brand-avatar" style="background: linear-gradient(135deg,#4a7fa5,#2d5f82);">P</div>
             <span class="card-brand-name">PureGym</span>
@@ -992,8 +976,9 @@
         </div>
         <div class="card-footer">
           <div class="card-cashback">
-            <span class="cashback-label">Total cashback paid</span>
-            <span class="cashback-val">£24,310</span>
+            <span class="cashback-earn-label">You could earn</span>
+            <span class="cashback-earn-val">£2.80</span>
+            <span class="cashback-total">£24,310 paid to members</span>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
             <div class="card-clicks">👆 1,100 clicks</div>
