@@ -1,0 +1,20 @@
+{
+  "name": "cirqle",
+  "version": "1.0.0",
+  "description": "Cirqle — fintech/martech cashback platform",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "fetch-ig": "node api/fetch-instagram.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/api/__tests__/**/*.test.js"]
+  }
+}
