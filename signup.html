@@ -557,12 +557,17 @@
       </form>
 
       <div class="signin-link">
-        Already have an account? <a href="#">Sign in</a>
+        Already have an account? <a href="signin.html">Sign in</a>
       </div>
     </div>
   </main>
 
   <script>
+    // ── If already signed in, go to browse ──
+    if (localStorage.getItem('cirqle_session') || sessionStorage.getItem('cirqle_session')) {
+      window.location.href = 'browse.html';
+    }
+
     // ── Password toggle ──
     function togglePass(inputId, btn) {
       const inp = document.getElementById(inputId);
@@ -604,14 +609,8 @@
     function showErr(id, errId, condition) {
       const el = document.getElementById(id);
       const err = document.getElementById(errId);
-      if (condition) {
-        el.classList.add('error');
-        err.classList.add('visible');
-        return false;
-      }
-      el.classList.remove('error');
-      err.classList.remove('visible');
-      return true;
+      if (condition) { el.classList.add('error'); err.classList.add('visible'); return false; }
+      el.classList.remove('error'); err.classList.remove('visible'); return true;
     }
 
     document.getElementById('signupForm').addEventListener('submit', e => {
@@ -629,25 +628,31 @@
       const v3 = showErr('email',           'emailErr',     !em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em));
       const v4 = showErr('password',        'passwordErr',  pw.length < 8);
       const v5 = showErr('confirmPassword', 'confirmErr',   pw !== cp);
+      termsErr.classList.toggle('visible', !tc);
+      if (!v1 || !v2 || !v3 || !v4 || !v5 || !tc) return;
 
-      if (!tc) {
-        termsErr.classList.add('visible');
-      } else {
-        termsErr.classList.remove('visible');
+      // Check email not already registered
+      const users = JSON.parse(localStorage.getItem('cirqle_users') || '[]');
+      if (users.find(u => u.email.toLowerCase() === em.toLowerCase())) {
+        document.getElementById('email').classList.add('error');
+        document.getElementById('emailErr').textContent = 'An account with this email already exists.';
+        document.getElementById('emailErr').classList.add('visible');
+        return;
       }
 
-      if (!v1 || !v2 || !v3 || !v4 || !v5 || !tc) return;
+      // Save new user
+      users.push({ firstName: fn, lastName: ln, email: em, password: pw });
+      localStorage.setItem('cirqle_users', JSON.stringify(users));
+
+      // Set session
+      localStorage.setItem('cirqle_session', JSON.stringify({ firstName: fn, lastName: ln, email: em }));
 
       const btn = document.getElementById('submitBtn');
       const txt = document.getElementById('submitText');
       btn.disabled = true;
-      txt.textContent = 'Creating your account…';
-
-      setTimeout(() => {
-        btn.classList.add('success');
-        txt.textContent = '🎉 Account created! Welcome to Cirqle';
-        setTimeout(() => { window.location.href = 'browse.html'; }, 1800);
-      }, 1200);
+      btn.classList.add('success');
+      txt.textContent = `🎉 Welcome to Cirqle, ${fn}!`;
+      setTimeout(() => { window.location.href = 'browse.html'; }, 1600);
     });
 
     // ── Orb parallax ──

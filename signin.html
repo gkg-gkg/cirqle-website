@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — Cirqle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05050f;
+      --surface: #0e0e1f;
+      --border: rgba(255,255,255,0.07);
+      --border-focus: rgba(122,175,200,0.5);
+      --blue: #4a7fa5;
+      --blue-light: #7aafc8;
+      --blue-dark: #2d5f82;
+      --text: #f1f5f9;
+      --muted: #64748b;
+      --glow-blue: rgba(74,127,165,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    .orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
+    .orb-1 { width: 600px; height: 600px; background: var(--glow-blue); top: -200px; right: -100px; animation: orbFloat 20s ease-in-out infinite alternate; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(45,95,130,0.2); bottom: -100px; left: -150px; animation: orbFloat 25s ease-in-out infinite alternate; animation-delay: -10s; }
+    @keyframes orbFloat {
+      0%   { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(30px,-20px) scale(1.04); }
+      100% { transform: translate(-15px,30px) scale(0.97); }
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 14px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(5,5,15,0.85);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700;
+      background: linear-gradient(135deg, #7aafc8, #4a7fa5, #2d5f82);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+    .nav-signup { font-size: 0.85rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-signup span { color: var(--blue-light); font-weight: 600; }
+    .nav-signup:hover span { text-decoration: underline; }
+
+    /* ── MAIN ── */
+    main {
+      position: relative; z-index: 1; flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 24px 60px; gap: 80px;
+    }
+
+    /* ── LEFT ── */
+    .left-panel {
+      flex: 1; max-width: 400px;
+      opacity: 0; transform: translateX(-30px);
+      animation: slideIn 0.7s 0.2s ease forwards;
+    }
+    @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+
+    .eyebrow {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--blue-light);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .eyebrow-dot { width: 6px; height: 6px; background: var(--blue-light); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .left-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700;
+      letter-spacing: -1.5px; color: #fff; line-height: 1.1; margin-bottom: 16px;
+    }
+    .left-heading .grad {
+      background: linear-gradient(135deg, #7aafc8, #4a7fa5, #2d5f82);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .left-sub { font-size: 0.95rem; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
+
+    .stats-mini { display: flex; flex-direction: column; gap: 16px; }
+    .stat-mini {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 16px; padding: 16px;
+    }
+    .stat-mini-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .stat-mini-val { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--blue-light); }
+    .stat-mini-label { font-size: 0.78rem; color: var(--muted); }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      width: 100%; max-width: 420px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 28px; padding: 40px;
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateX(30px);
+      animation: slideIn 0.7s 0.35s ease forwards;
+    }
+    .form-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(122,175,200,0.4), transparent);
+    }
+    .form-card::after {
+      content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(74,127,165,0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .card-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 28px; }
+
+    /* ── FIELDS ── */
+    form { position: relative; z-index: 1; }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 7px; letter-spacing: 0.2px; }
+    .field-wrap { position: relative; }
+    .field-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.9rem; pointer-events: none; opacity: 0.5; }
+    .field input {
+      width: 100%;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 14px 12px 38px; color: #fff; font-size: 0.9rem;
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .field input::placeholder { color: var(--muted); }
+    .field input:focus { border-color: var(--border-focus); background: rgba(74,127,165,0.06); box-shadow: 0 0 0 3px rgba(74,127,165,0.1); }
+    .field input.error { border-color: rgba(239,68,68,0.5); }
+
+    .pass-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 0.85rem; padding: 0; transition: color 0.2s;
+    }
+    .pass-toggle:hover { color: var(--blue-light); }
+
+    .field-error { font-size: 0.72rem; color: #f87171; margin-top: 5px; display: none; }
+    .field-error.visible { display: block; }
+
+    /* Remember + forgot row */
+    .remember-row { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 20px; }
+    .remember { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); cursor: pointer; }
+    .remember input { accent-color: var(--blue); cursor: pointer; }
+    .forgot { font-size: 0.8rem; color: var(--blue-light); text-decoration: none; transition: opacity 0.2s; }
+    .forgot:hover { opacity: 0.8; text-decoration: underline; }
+
+    /* Error banner */
+    .error-banner {
+      background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 12px; padding: 12px 14px;
+      font-size: 0.82rem; color: #fca5a5; margin-bottom: 16px;
+      display: none; align-items: center; gap: 8px;
+    }
+    .error-banner.visible { display: flex; }
+
+    /* Submit */
+    .btn-submit {
+      width: 100%; background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: #fff; border: none; padding: 15px; border-radius: 14px;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.3s;
+      position: relative; overflow: hidden; letter-spacing: 0.2px;
+    }
+    .btn-submit::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--blue-light), var(--blue)); opacity: 0; transition: opacity 0.3s;
+    }
+    .btn-submit:hover::before { opacity: 1; }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,127,165,0.4); }
+    .btn-submit span { position: relative; z-index: 1; }
+    .btn-submit.success { background: linear-gradient(135deg, #16a34a, #15803d); }
+    .btn-submit.success::before { display: none; }
+    .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    /* Divider */
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-text { font-size: 0.75rem; color: var(--muted); }
+
+    /* Social */
+    .social-btns { display: flex; gap: 10px; }
+    .social-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 12px;
+      padding: 11px; color: rgba(255,255,255,0.7); font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; text-decoration: none; font-family: 'Inter', sans-serif; transition: all 0.2s;
+    }
+    .social-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(122,175,200,0.25); color: #fff; }
+
+    .signup-link { text-align: center; margin-top: 20px; font-size: 0.82rem; color: var(--muted); }
+    .signup-link a { color: var(--blue-light); text-decoration: none; font-weight: 600; }
+    .signup-link a:hover { text-decoration: underline; }
+
+    /* Forgot password modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px); z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 36px; max-width: 380px; width: 100%;
+      margin: 20px; position: relative;
+      transform: translateY(20px); transition: transform 0.3s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .modal-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: 8px; width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--muted); font-size: 0.9rem; transition: all 0.2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-btn {
+      width: 100%; background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: #fff; border: none; padding: 13px; border-radius: 12px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.2s; margin-top: 14px;
+    }
+    .modal-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(74,127,165,0.35); }
+    .modal-success { text-align: center; display: none; }
+    .modal-success.visible { display: block; }
+    .modal-success-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .modal-success-text { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    @media (max-width: 860px) {
+      main { flex-direction: column; gap: 40px; padding: 90px 20px 60px; }
+      .left-panel { max-width: 100%; }
+      .stats-mini { flex-direction: row; }
+      nav { padding: 14px 20px; }
+    }
+    @media (max-width: 480px) {
+      .stats-mini { flex-direction: column; }
+      .form-card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">cirqle</a>
+    <a href="signup.html" class="nav-signup">New here? <span>Create an account</span></a>
+  </nav>
+
+  <main>
+    <!-- Left panel -->
+    <div class="left-panel">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> Welcome back</div>
+      <h1 class="left-heading">Good to have<br>you <span class="grad">back.</span></h1>
+      <p class="left-sub">Sign in to see your cashback earnings, active deals, and wallet balance.</p>
+      <div class="stats-mini">
+        <div class="stat-mini">
+          <div class="stat-mini-icon">💸</div>
+          <div>
+            <div class="stat-mini-val">£2M+</div>
+            <div class="stat-mini-label">Cashback paid to members</div>
+          </div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-icon">🛍️</div>
+          <div>
+            <div class="stat-mini-val">500+</div>
+            <div class="stat-mini-label">Partner brands available</div>
+          </div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-icon">⭐</div>
+          <div>
+            <div class="stat-mini-val">4.9★</div>
+            <div class="stat-mini-label">Average app store rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form card -->
+    <div class="form-card">
+      <div class="card-title">Sign in to Cirqle</div>
+      <div class="card-sub">Enter your email and password below.</div>
+
+      <div class="error-banner" id="errorBanner">
+        <span>⚠️</span>
+        <span id="errorMsg">Incorrect email or password. Please try again.</span>
+      </div>
+
+      <form id="signinForm" novalidate>
+        <div class="field">
+          <label for="email">Email address</label>
+          <div class="field-wrap">
+            <span class="field-icon">✉️</span>
+            <input type="email" id="email" placeholder="alex@example.com" autocomplete="email" />
+          </div>
+          <div class="field-error" id="emailErr">Please enter a valid email address.</div>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="field-wrap">
+            <span class="field-icon">🔒</span>
+            <input type="password" id="password" placeholder="Your password" autocomplete="current-password" />
+            <button type="button" class="pass-toggle" id="passToggle">👁</button>
+          </div>
+          <div class="field-error" id="passwordErr">Please enter your password.</div>
+        </div>
+
+        <div class="remember-row">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe" /> Remember me
+          </label>
+          <a href="#" class="forgot" id="forgotLink">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span id="submitText">Sign in →</span>
+        </button>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <span class="divider-text">or continue with</span>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="social-btns">
+          <a href="#" class="social-btn">🍎 Apple</a>
+          <a href="#" class="social-btn">G Google</a>
+          <a href="#" class="social-btn">📘 Facebook</a>
+        </div>
+      </form>
+
+      <div class="signup-link">
+        Don't have an account? <a href="signup.html">Sign up free</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Forgot password modal -->
+  <div class="modal-overlay" id="forgotModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div id="forgotForm">
+        <div class="modal-title">Reset your password</div>
+        <div class="modal-sub">Enter your email and we'll send you a link to reset your password.</div>
+        <div class="field">
+          <label for="resetEmail">Email address</label>
+          <div class="field-wrap">
+            <span class="field-icon">✉️</span>
+            <input type="email" id="resetEmail" placeholder="alex@example.com" />
+          </div>
+        </div>
+        <button class="modal-btn" id="resetBtn">Send reset link</button>
+      </div>
+      <div class="modal-success" id="forgotSuccess">
+        <div class="modal-success-icon">📬</div>
+        <div class="modal-title" style="margin-bottom:8px;">Check your inbox</div>
+        <div class="modal-success-text">If an account exists for that email, you'll receive a password reset link within a few minutes.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── If already signed in, go to browse ──
+    if (localStorage.getItem('cirqle_session')) {
+      window.location.href = 'browse.html';
+    }
+
+    // ── Password toggle ──
+    const passInput = document.getElementById('password');
+    document.getElementById('passToggle').addEventListener('click', function() {
+      const isText = passInput.type === 'text';
+      passInput.type = isText ? 'password' : 'text';
+      this.textContent = isText ? '👁' : '🙈';
+    });
+
+    // ── Sign in form ──
+    document.getElementById('signinForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const remember = document.getElementById('rememberMe').checked;
+      const banner   = document.getElementById('errorBanner');
+      let valid = true;
+
+      // Validate fields
+      const emailOk = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      document.getElementById('email').classList.toggle('error', !emailOk);
+      document.getElementById('emailErr').classList.toggle('visible', !emailOk);
+      if (!emailOk) valid = false;
+
+      const passOk = password.length > 0;
+      document.getElementById('password').classList.toggle('error', !passOk);
+      document.getElementById('passwordErr').classList.toggle('visible', !passOk);
+      if (!passOk) valid = false;
+
+      if (!valid) return;
+
+      // Check against stored users
+      const users = JSON.parse(localStorage.getItem('cirqle_users') || '[]');
+      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+
+      if (!user) {
+        banner.classList.add('visible');
+        document.getElementById('email').classList.add('error');
+        document.getElementById('password').classList.add('error');
+        return;
+      }
+
+      banner.classList.remove('visible');
+
+      // Set session
+      const session = { firstName: user.firstName, lastName: user.lastName, email: user.email };
+      if (remember) {
+        localStorage.setItem('cirqle_session', JSON.stringify(session));
+      } else {
+        sessionStorage.setItem('cirqle_session', JSON.stringify(session));
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.classList.add('success');
+      document.getElementById('submitText').textContent = `🎉 Welcome back, ${user.firstName}!`;
+      setTimeout(() => { window.location.href = 'browse.html'; }, 1400);
+    });
+
+    // ── Clear errors on input ──
+    ['email','password'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById(id).classList.remove('error');
+        document.getElementById(id + 'Err').classList.remove('visible');
+        document.getElementById('errorBanner').classList.remove('visible');
+      });
+    });
+
+    // ── Forgot password modal ──
+    const modal = document.getElementById('forgotModal');
+    document.getElementById('forgotLink').addEventListener('click', e => { e.preventDefault(); modal.classList.add('open'); });
+    document.getElementById('modalClose').addEventListener('click', () => {
+      modal.classList.remove('open');
+      document.getElementById('forgotForm').style.display = '';
+      document.getElementById('forgotSuccess').classList.remove('visible');
+    });
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      const em = document.getElementById('resetEmail').value.trim();
+      if (!em) return;
+      document.getElementById('forgotForm').style.display = 'none';
+      document.getElementById('forgotSuccess').classList.add('visible');
+    });
+
+    // ── Orb parallax ──
+    document.addEventListener('mousemove', e => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.querySelector('.orb-1').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+      document.querySelector('.orb-2').style.transform = `translate(${-x * 25}px, ${-y * 25}px)`;
+    }, { passive: true });
+  </script>
+</body>
+</html>
