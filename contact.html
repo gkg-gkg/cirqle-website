@@ -6,11 +6,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#05050f;--surface:#0e0e1f;--border:rgba(255,255,255,0.07);--blue:#3daee0;--blue-light:#6dd4f5;--blue-dark:#1e86bb;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(61,174,224,0.3)}
+    :root{--bg:#0a1838;--surface:#15224a;--border:rgba(255,255,255,0.07);--blue:#3daee0;--blue-light:#6dd4f5;--blue-dark:#1e86bb;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(61,174,224,0.3)}
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
     body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
-    .orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+    .orb-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;will-change:transform}.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
     .orb-1{width:500px;height:500px;background:var(--glow);top:-100px;right:-100px;animation:orbFloat 18s ease-in-out infinite alternate}
     .orb-2{width:350px;height:350px;background:rgba(30,134,187,.18);bottom:-80px;left:-80px;animation:orbFloat 22s ease-in-out infinite alternate;animation-delay:-9s}
     @keyframes orbFloat{0%{transform:translate(0,0)}50%{transform:translate(30px,-25px)}100%{transform:translate(-15px,30px)}}
@@ -52,9 +52,9 @@
     .success-msg{display:none;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:12px;padding:16px;color:#4ade80;font-size:.88rem;text-align:center;margin-top:16px}
     @media(max-width:720px){.layout{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.page{padding:90px 20px 60px}nav{padding:14px 20px}}
   </style>
-</head>
+<link rel="stylesheet" href="assets/enhance.css"></head>
 <body>
-<div class="orb orb-1"></div><div class="orb orb-2"></div>
+<div class="orb-wrap orb-wrap-1"><div class="orb orb-1"></div></div><div class="orb-wrap orb-wrap-2"><div class="orb orb-2"></div></div>
 <nav>
   <a href="index.html" class="nav-logo">cirqle</a>
   <div class="nav-right">
@@ -144,9 +144,9 @@ function handleSubmit() {
 }
 document.addEventListener('mousemove', e => {
   const x = (e.clientX/window.innerWidth-.5)*2, y = (e.clientY/window.innerHeight-.5)*2;
-  document.querySelector('.orb-1').style.transform = `translate(${x*18}px,${y*18}px)`;
-  document.querySelector('.orb-2').style.transform = `translate(${-x*22}px,${-y*22}px)`;
+  document.querySelector('.orb-wrap-1').style.transform = `translate(${x*18}px,${y*18}px)`;
+  document.querySelector('.orb-wrap-2').style.transform = `translate(${-x*22}px,${-y*22}px)`;
 }, {passive:true});
 </script>
-</body>
+<script src="assets/enhance.js"></script></body>
 </html>

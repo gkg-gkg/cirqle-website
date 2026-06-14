@@ -11,8 +11,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #05050f;
-      --surface: #0e0e1f;
+      --bg: #0a1838;
+      --surface: #15224a;
       --border: rgba(255,255,255,0.07);
       --border-focus: rgba(109,212,245,0.5);
       --blue: #3daee0;
@@ -44,7 +44,8 @@
       opacity: 0.4;
     }
 
-    .orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
+    .orb-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; will-change: transform; }
+.orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
     .orb-1 { width: 600px; height: 600px; background: var(--glow-blue); top: -200px; right: -100px; animation: orbFloat 20s ease-in-out infinite alternate; }
     .orb-2 { width: 400px; height: 400px; background: rgba(30,134,187,0.2); bottom: -100px; left: -150px; animation: orbFloat 25s ease-in-out infinite alternate; animation-delay: -10s; }
     @keyframes orbFloat {
@@ -273,11 +274,11 @@
       .form-card { padding: 28px 20px; }
     }
   </style>
-</head>
+<link rel="stylesheet" href="assets/enhance.css"></head>
 <body>
 
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+  <div class="orb-wrap orb-wrap-1"><div class="orb orb-1"></div></div>
+  <div class="orb-wrap orb-wrap-2"><div class="orb orb-2"></div></div>
 
   <nav>
     <a href="index.html" class="nav-logo">cirqle</a>
@@ -503,10 +504,10 @@
     document.addEventListener('mousemove', e => {
       const x = (e.clientX / window.innerWidth - 0.5) * 2;
       const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      document.querySelector('.orb-1').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
-      document.querySelector('.orb-2').style.transform = `translate(${-x * 25}px, ${-y * 25}px)`;
+      document.querySelector('.orb-wrap-1').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+      document.querySelector('.orb-wrap-2').style.transform = `translate(${-x * 25}px, ${-y * 25}px)`;
     }, { passive: true });
   </script>
   <div id="socialToast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,31,.95);border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(16px);border-radius:14px;padding:12px 22px;font-size:.85rem;color:#fff;z-index:5000;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap">🔜 Social sign-in coming soon — use email for now</div>
-</body>
+<script src="assets/enhance.js"></script></body>
 </html>

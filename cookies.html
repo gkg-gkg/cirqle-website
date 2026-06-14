@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#05050f;--surface:#0e0e1f;--border:rgba(255,255,255,0.07);--blue:#3daee0;--blue-light:#6dd4f5;--blue-dark:#1e86bb;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(61,174,224,0.3)}
+    :root{--bg:#0a1838;--surface:#15224a;--border:rgba(255,255,255,0.07);--blue:#3daee0;--blue-light:#6dd4f5;--blue-dark:#1e86bb;--text:#f1f5f9;--muted:#64748b;--card:rgba(255,255,255,0.03);--glow:rgba(61,174,224,0.3)}
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
     body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
@@ -36,7 +36,7 @@
     .legal-footer{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 24px;font-size:.8rem;color:var(--muted);line-height:1.7}
     @media(max-width:600px){.page{padding:90px 20px 60px}nav{padding:14px 20px}td,th{padding:8px 10px}}
   </style>
-</head>
+<link rel="stylesheet" href="assets/enhance.css"></head>
 <body>
 <nav>
   <a href="index.html" class="nav-logo">cirqle</a>
@@ -106,5 +106,5 @@
     For questions about our use of cookies, contact <a href="mailto:privacy@cirqle.co.uk">privacy@cirqle.co.uk</a>. See also: <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
   </div>
 </div>
-</body>
+<script src="assets/enhance.js"></script></body>
 </html>

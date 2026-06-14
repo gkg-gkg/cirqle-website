@@ -11,8 +11,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #05050f;
-      --surface: #0e0e1f;
+      --bg: #0a1838;
+      --surface: #15224a;
       --border: rgba(255,255,255,0.07);
       --blue: #3daee0;
       --blue-light: #6dd4f5;
@@ -66,6 +66,49 @@
       33%  { transform: translate(60px, -40px) scale(1.05); }
       66%  { transform: translate(-30px, 60px) scale(0.95); }
       100% { transform: translate(40px, 20px) scale(1.02); }
+    }
+
+    /* ── Mouse-parallax wrappers (keep the orb float animation intact) ── */
+    .orb-wrap {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform;
+      transition: transform 0.45s cubic-bezier(.2,.8,.2,1);
+    }
+
+    /* ── Scroll progress bar ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue-dark), var(--blue), var(--blue-light));
+      box-shadow: 0 0 14px var(--glow-blue);
+      z-index: 2000;
+      transition: width 0.12s linear;
+    }
+
+    /* ── Cursor spotlight glow ── */
+    .cursor-glow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 480px; height: 480px;
+      margin: -240px 0 0 -240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(109,212,245,0.12), rgba(61,174,224,0.05) 40%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      will-change: transform;
+    }
+
+    /* Honour users who prefer less motion */
+    @media (prefers-reduced-motion: reduce) {
+      .orb, .orb-wrap, .cursor-glow, .scroll-progress { animation: none !important; transition: none !important; }
+      .cursor-glow { display: none; }
     }
 
     /* ── Scrollbar ── */
@@ -1129,10 +1172,14 @@
 </head>
 <body>
 
-  <!-- Background orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <!-- Scroll progress + cursor spotlight -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Background orbs (wrapped so mouse parallax doesn't kill the float animation) -->
+  <div class="orb-wrap orb-wrap-1"><div class="orb orb-1"></div></div>
+  <div class="orb-wrap orb-wrap-2"><div class="orb orb-2"></div></div>
+  <div class="orb-wrap orb-wrap-3"><div class="orb orb-3"></div></div>
 
   <!-- ══ NAVIGATION ══ -->
   <nav id="navbar">
@@ -1144,8 +1191,9 @@
       <li><a href="#testimonials">Reviews</a></li>
     </ul>
     <div class="nav-cta">
-      <a href="signin.html" class="btn-ghost">Sign in</a>
-      <a href="signup.html" class="btn-primary"><span>Get started</span></a>
+      <a href="signin.html" class="btn-ghost" id="navSignin">Sign in</a>
+      <a href="signup.html" class="btn-primary" id="navGetStarted"><span>Get started</span></a>
+      <a href="dashboard.html" class="btn-primary" id="navDash" style="display:none"><span>Go to dashboard</span></a>
     </div>
   </nav>
 
@@ -1599,10 +1647,26 @@
   </footer>
 
   <script>
-    // ── Navbar scroll ──
+    // ── Reflect signed-in state in the nav ──
+    const session = JSON.parse(localStorage.getItem('cirqle_session') || sessionStorage.getItem('cirqle_session') || 'null');
+    if (session) {
+      const navSignin = document.getElementById('navSignin');
+      const navGetStarted = document.getElementById('navGetStarted');
+      const navDash = document.getElementById('navDash');
+      if (navSignin) navSignin.style.display = 'none';
+      if (navGetStarted) navGetStarted.style.display = 'none';
+      if (navDash) navDash.style.display = 'inline-flex';
+    }
+
+    // ── Navbar scroll + scroll progress bar ──
     const navbar = document.getElementById('navbar');
+    const progress = document.getElementById('scrollProgress');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 60);
+      if (progress) {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      }
     }, { passive: true });
 
     // ── Scroll reveal ──
@@ -1662,14 +1726,58 @@
       });
     });
 
-    // ── Parallax orbs on mouse move ──
-    document.addEventListener('mousemove', e => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      document.querySelector('.orb-1').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
-      document.querySelector('.orb-2').style.transform = `translate(${-x * 30}px, ${-y * 30}px)`;
-      document.querySelector('.orb-3').style.transform = `translate(${x * 15}px, ${y * -15}px)`;
-    }, { passive: true });
+    // ── Interactive pointer effects (skipped on touch / reduced-motion) ──
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (finePointer && !reduceMotion) {
+      // Parallax on the orb wrappers — leaves each orb's float animation untouched
+      const w1 = document.querySelector('.orb-wrap-1');
+      const w2 = document.querySelector('.orb-wrap-2');
+      const w3 = document.querySelector('.orb-wrap-3');
+      const glow = document.getElementById('cursorGlow');
+
+      // Smoothly trail the cursor glow with requestAnimationFrame
+      let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+      let gx = mx, gy = my, raf = null;
+      const trail = () => {
+        gx += (mx - gx) * 0.16;
+        gy += (my - gy) * 0.16;
+        if (glow) glow.style.transform = `translate(${gx}px, ${gy}px)`;
+        if (Math.abs(mx - gx) > 0.4 || Math.abs(my - gy) > 0.4) {
+          raf = requestAnimationFrame(trail);
+        } else {
+          raf = null;
+        }
+      };
+
+      document.addEventListener('mousemove', e => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        if (w1) w1.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+        if (w2) w2.style.transform = `translate(${-x * 30}px, ${-y * 30}px)`;
+        if (w3) w3.style.transform = `translate(${x * 15}px, ${y * -15}px)`;
+
+        mx = e.clientX; my = e.clientY;
+        if (glow) glow.style.opacity = '1';
+        if (!raf) raf = requestAnimationFrame(trail);
+      }, { passive: true });
+
+      document.addEventListener('mouseleave', () => {
+        if (glow) glow.style.opacity = '0';
+      });
+
+      // Magnetic primary buttons — gently pull toward the cursor
+      document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+          const r = btn.getBoundingClientRect();
+          const dx = e.clientX - r.left - r.width / 2;
+          const dy = e.clientY - r.top - r.height / 2;
+          btn.style.transform = `translate(${dx * 0.22}px, ${dy * 0.34}px)`;
+        });
+        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+      });
+    }
 
     // ── Balance counter animation on load ──
     const balEl = document.getElementById('balanceCount');

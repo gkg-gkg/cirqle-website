@@ -1,0 +1,35 @@
+/* ── Cirqle shared UI enhancements (loaded site-wide) ── */
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, #1e86bb, #3daee0, #6dd4f5);
+  box-shadow: 0 0 14px rgba(61, 174, 224, 0.45);
+  z-index: 2000;
+  pointer-events: none;
+  transition: width 0.12s linear;
+}
+
+/* Cursor spotlight glow */
+.cursor-glow {
+  position: fixed;
+  top: 0; left: 0;
+  width: 480px; height: 480px;
+  margin: -240px 0 0 -240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(109,212,245,0.10), rgba(61,174,224,0.05) 40%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  will-change: transform;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-glow { display: none; }
+  .scroll-progress { transition: none; }
+}
