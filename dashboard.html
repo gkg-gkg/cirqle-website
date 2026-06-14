@@ -389,20 +389,32 @@
       return String(n);
     }
 
+    function esc(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    const handle = esc(u.username || 'cirqle_ltd');
+
     // Build profile card
     const avatarHtml = u.profile_pic_url
-      ? `<img src="${u.profile_pic_url}" alt="@${u.username}" />`
-      : `${(u.username || 'C')[0].toUpperCase()}`;
+      ? `<img src="${esc(u.profile_pic_url)}" alt="@${handle}" />`
+      : `${esc((u.username || 'C')[0].toUpperCase())}`;
 
     el.innerHTML = `
       <div class="ig-profile-card">
         <div class="ig-avatar">${avatarHtml}</div>
         <div class="ig-profile-info">
           <div class="ig-handle">
-            @${u.username || 'cirqle_ltd'}
+            @${handle}
             ${u.is_verified ? '<span class="ig-verified">✓</span>' : ''}
           </div>
-          ${u.biography ? `<div class="ig-bio">${u.biography}</div>` : ''}
+          ${u.biography ? `<div class="ig-bio">${esc(u.biography)}</div>` : ''}
           <div class="ig-stats-mini">
             <div class="ig-stat">
               <div class="ig-stat-val">${fmt(u.follower_count)}</div>
@@ -424,7 +436,7 @@
         ${posts.map(p => `
           <div class="ig-post">
             ${p.thumbnail_url
-              ? `<img class="ig-post-thumb" src="${p.thumbnail_url}" alt="post" loading="lazy" />`
+              ? `<img class="ig-post-thumb" src="${esc(p.thumbnail_url)}" alt="post" loading="lazy" />`
               : `<div class="ig-post-fallback">${p.is_video ? '▶️' : '🖼️'}</div>`
             }
             <div class="ig-post-overlay">

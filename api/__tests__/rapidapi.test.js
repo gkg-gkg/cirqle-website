@@ -130,24 +130,48 @@ test('getPosts parses posts and tolerates null seen field', async () => {
   expect(posts[0].like_count).toBe(340);
 });
 
+// ── Reels ──────────────────────────────────────────────────────────────────
+
+test('getReels parses reels with null seen and play_count', async () => {
+  mockFetch({
+    body: {
+      items: [
+        {
+          id: 'r1',
+          code: 'REEL01',
+          taken_at: 1718100000,
+          like_count: 900,
+          comment_count: 42,
+          play_count: 15000,
+          caption: { text: 'New reel!' },
+          is_video: true,
+          thumbnail_url: null,
+          seen: null,
+        },
+      ],
+      pagination_token: null,
+    },
+  });
+
+  const reels = await makeProvider().getReels();
+  expect(reels).toHaveLength(1);
+  expect(reels[0].is_video).toBe(true);
+  expect(reels[0].play_count).toBe(15000);
+  expect(reels[0].seen).toBeNull();
+  expect(reels[0].thumbnail_url).toBeNull();
+});
+
 // ── Error handling ─────────────────────────────────────────────────────────
 
 test('_post retries on 429 and eventually throws', async () => {
   jest.spyOn(global, 'fetch').mockResolvedValue({
     ok: false, status: 429, json: () => Promise.resolve({}), text: () => Promise.resolve(''),
   });
-  // Speed up the test by mocking setTimeout
-  jest.useFakeTimers();
-  const provider = makeProvider();
-  const promise = provider.getUserInfo();
-  // Flush all timers/promises across retries
-  for (let i = 0; i < 3; i++) {
-    await Promise.resolve();
-    jest.runAllTimers();
-    await Promise.resolve();
-  }
-  await expect(promise).rejects.toThrow('Rate limited by RapidAPI (429)');
-  jest.useRealTimers();
+  // Skip real delays so the test runs instantly
+  jest.spyOn(global, 'setTimeout').mockImplementation(cb => { cb(); return 0; });
+
+  await expect(makeProvider().getUserInfo()).rejects.toThrow('Rate limited by RapidAPI (429)');
+  expect(global.fetch).toHaveBeenCalledTimes(3);
 });
 
 test('_post throws a clear error on non-200/non-429 status', async () => {

@@ -101,6 +101,18 @@ class RapidApiInstagramProvider extends InstagramDataProvider {
     );
     return raw.map(parsePost).filter(Boolean);
   }
+
+  async getReels({ maxPages = 3, amount = 12 } = {}) {
+    const raw = await fetchAllPages(
+      token => this._post('get_ig_user_reels_v2.php', {
+        username_or_url: this.username,
+        amount: String(amount),
+        ...(token ? { pagination_token: token } : {}),
+      }),
+      { maxPages },
+    );
+    return raw.map(parsePost).filter(Boolean);
+  }
 }
 
 module.exports = { RapidApiInstagramProvider };

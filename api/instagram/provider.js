@@ -17,6 +17,10 @@ class InstagramDataProvider {
   // @param {{ maxPages?: number, amount?: number }} options
   // @returns {Promise<import('./types').Post[]>}
   async getPosts(_options) { throw new Error('Not implemented'); }
+
+  // @param {{ maxPages?: number, amount?: number }} options
+  // @returns {Promise<import('./types').Post[]>}
+  async getReels(_options) { throw new Error('Not implemented'); }
 }
 
 module.exports = { InstagramDataProvider };
